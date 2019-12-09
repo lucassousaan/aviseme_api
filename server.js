@@ -111,5 +111,47 @@ app.post('/avisemeapi/ocurrence', (req, res) => {
     var bodyReq = req.body;
     var date = new Date();
     bodyReq.data_ocorrencia = date;
-    res.status(201).json(bodyReq);
+    db.open((err, mongoclient) => {
+        mongoclient.collection("ocurrence", (err, collection) => {
+            collection.insert(bodyReq, (err, records) => {
+                if (err) {
+                    res.json(err);
+                } else {
+                    res.status(201).json(records);
+                }
+                mongoclient.close();
+            });
+        });
+    });
+});
+
+app.get('/avisemeapi/ocurrence', (req, res) => {
+    db.open((err, mongoclient) => {
+		mongoclient.collection('ocurrence', function(err, collection){
+			collection.find().toArray(function(err, results){
+				if(err){
+					res.json(err);
+				} else {
+					res.json(results);
+				}
+				mongoclient.close();
+			});
+		});
+	});
+});
+
+app.get('/avisemeapi/ocurrence/:id', function(req, res){
+	db.open((err, mongoclient) => {
+		mongoclient.collection('ocurrence', function(err, collection){
+			collection.find(objectId(req.params.id)).toArray(function(err, results){
+				if(err){
+					res.json(err);
+				} else {
+					res.status(200).json(results);
+				}
+				mongoclient.close();
+			});
+		});
+	});
+
 });
