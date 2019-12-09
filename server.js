@@ -125,9 +125,10 @@ app.post('/avisemeapi/ocurrence', (req, res) => {
     });
 });
 
+// busca todas ocorrências
 app.get('/avisemeapi/ocurrence', (req, res) => {
     db.open((err, mongoclient) => {
-		mongoclient.collection('ocurrence', function(err, collection){
+		mongoclient.collection('ocurrence', (err, collection) => {
 			collection.find().toArray(function(err, results){
 				if(err){
 					res.json(err);
@@ -140,9 +141,10 @@ app.get('/avisemeapi/ocurrence', (req, res) => {
 	});
 });
 
-app.get('/avisemeapi/ocurrence/:id', function(req, res){
+//Busca ocorrência específica, de acordo com o id
+app.get('/avisemeapi/ocurrence/:id', (req, res) => {
 	db.open((err, mongoclient) => {
-		mongoclient.collection('ocurrence', function(err, collection){
+		mongoclient.collection('ocurrence', (err, collection) => {
 			collection.find(objectId(req.params.id)).toArray(function(err, results){
 				if(err){
 					res.json(err);
